@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
+import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 
 export const signup = async (req, res) => {
     const { email, password, name } = req.body;
@@ -25,6 +26,19 @@ export const signup = async (req, res) => {
         })
 
         await user.save();
+
+        // jwt token
+        generateTokenAndSetCookie(res, user._id);
+
+        res.status(201).json({
+            success: true,
+            message: "User created successfully",
+            user: {
+                ...user._doc,
+                password: undefined,
+            },
+        });
+
     }
     catch (error) {
         return res.status(400).json({success:false, message: error.message});
