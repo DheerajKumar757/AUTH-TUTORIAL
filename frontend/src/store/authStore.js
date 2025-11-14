@@ -4,6 +4,8 @@ import axios from "axios";
 
 const API_URL = "http://localhost:5000/api/auth";
 
+axios.defaults.withCredentials = true; // Allow axios to send cookies with every requests
+
 export const useAuthStore = create((set) => ({
     user:null,
     isAuthenticated:false,
